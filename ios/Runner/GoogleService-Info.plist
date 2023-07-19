@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>431421130883-m3g57i2drfif24qi5jg4sob10uo8vk02.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.431421130883-m3g57i2drfif24qi5jg4sob10uo8vk02</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAm4XLfrdkvMH8eZ5NUFn86HiuaA9sW3Zk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>431421130883</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.farmersConnect</string>
+	<key>PROJECT_ID</key>
+	<string>farmersconnect-21f53</string>
+	<key>STORAGE_BUCKET</key>
+	<string>farmersconnect-21f53.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:431421130883:ios:59a46407f49203adc1b3b6</string>
+</dict>
+</plist>
