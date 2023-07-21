@@ -3,6 +3,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:geolocator/geolocator.dart';
+import '../auth.dart';
 import '/services/api_service.dart';
 import 'weather_page.dart';
 import 'news_bulletin_page.dart';
@@ -23,7 +25,51 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     fetchNews();
+    // _getLocation();
   }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+//  Future<void> _getLocation() async {
+//     try {
+//       await Geolocator.getCurrentPosition(
+//               desiredAccuracy: LocationAccuracy.high)
+//           .then((Position position) {
+//         setState(() => _currentPosition = position);
+//       }).catchError((e) {
+//         debugPrint(e);
+//       });
+//     } catch (e) {
+//       print(e);
+//     }
+//   }
 
   void fetchNews() async {
     try {
@@ -35,6 +81,10 @@ class _DashboardPageState extends State<DashboardPage> {
       // Handle the error
       print('Error fetching news: $e');
     }
+  }
+
+  Future<void> signOut() async {
+    await Auth().signOut();
   }
 
   @override
@@ -210,11 +260,12 @@ class _DashboardPageState extends State<DashboardPage> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.contact_mail),
-            title: Text('Contact Us'),
+            leading: Icon(Icons.exit_to_app_rounded),
+            title: Text('Sign out'),
             onTap: () {
               // Implement the navigation to the Contact Us page here
               Navigator.pop(context); // Close the drawer
+              signOut();
             },
           ),
         ],

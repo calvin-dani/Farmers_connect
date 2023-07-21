@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:logintunisia/screens/dashboard_page.dart';
 import 'package:logintunisia/screens/home_page.dart';
 import 'package:logintunisia/screens/login_register_page.dart';
 
@@ -20,7 +21,7 @@ class _WidgetTreeState extends State<WidgetTree>{
     return StreamBuilder(stream: Auth().authStateChanges,
     builder: (context,snapshot){
       if(snapshot.hasData){
-        return HomePage();
+        return DashboardPage();
       }
       else{
         return const LoginPage();
