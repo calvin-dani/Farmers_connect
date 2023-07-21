@@ -102,8 +102,8 @@ class _WeatherCardState extends State<WeatherCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/icons/weather_icon.png',
-                height: 80.0, width: 80.0),
+            Icon(Icons.wb_sunny,
+                size: 80), // Default weather related icon from Flutter
             SizedBox(height: 8.0),
             Text('Weather', style: TextStyle(fontSize: 18.0)),
             SizedBox(height: 8.0),
@@ -132,36 +132,32 @@ class WeatherPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: Text('Weather')),
         body: ListView(children: [
-          (
-            ListTile(
+          (ListTile(
             title: Text(OptionsAPI[0]),
             subtitle: Text(weatherData['weather'][0]["description"] ?? ""),
             onTap: () {
               // Add your action when tapping the card here
             },
           )),
-          (
-            ListTile(
+          (ListTile(
             title: Text(OptionsAPI[1]),
-            subtitle: Text( weatherData['main']["temp"].toString()),
+            subtitle: Text(weatherData['main']["temp"].toString()),
             onTap: () {
-              // Add your action when tapping the card here 
+              // Add your action when tapping the card here
             },
           )),
-          (
-            ListTile(
+          (ListTile(
             title: Text(OptionsAPI[2]),
-            subtitle: Text( weatherData['wind']["speed"].toString()),
+            subtitle: Text(weatherData['wind']["speed"].toString()),
             onTap: () {
-              // Add your action when tapping the card here 
+              // Add your action when tapping the card here
             },
           )),
-          (
-            ListTile(
+          (ListTile(
             title: Text(OptionsAPI[4]),
             subtitle: Text(weatherData['clouds']["all"].toString()),
             onTap: () {
-              // Add your action when tapping the card here 
+              // Add your action when tapping the card here
             },
           ))
         ]));
