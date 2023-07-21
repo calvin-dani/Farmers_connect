@@ -1,6 +1,6 @@
 // weather_page.dart
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
+import '/services/api_service.dart';
 
 class WeatherCard extends StatefulWidget {
   @override
@@ -50,8 +50,8 @@ class _WeatherCardState extends State<WeatherCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/icons/weather_icon.png',
-                height: 80.0, width: 80.0),
+            Icon(Icons.wb_sunny,
+                size: 80), // Default weather related icon from Flutter
             SizedBox(height: 8.0),
             Text('Weather', style: TextStyle(fontSize: 18.0)),
             SizedBox(height: 8.0),

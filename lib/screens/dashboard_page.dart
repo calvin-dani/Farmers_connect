@@ -1,13 +1,15 @@
+// dashboard_page.dart
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
-import '../services/api_service.dart';
+import '/services/api_service.dart';
 import 'weather_page.dart';
 import 'news_bulletin_page.dart';
 import 'plant_disease_detection_page.dart';
 import 'marketplace_page.dart';
 import 'miscellaneous_page.dart';
+import 'plant_disease_detection_card.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -15,7 +17,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  List<String> newsAndNotifications = [];
+  List<NewsItem> newsAndNotifications = [];
 
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void fetchNews() async {
     try {
-      final List<String> news = await ApiService.fetchNews();
+      final List<NewsItem> news = await ApiService.fetchNews();
       setState(() {
         newsAndNotifications = news;
       });
@@ -39,17 +41,16 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Farmers Connect'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              // Open the drawer
-              Scaffold.of(context).openDrawer();
-            },
+          title: Text(
+            'Farmers Connect',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto',
+            ),
           ),
-        ],
-      ),
+          backgroundColor: const Color.fromARGB(255, 62, 147, 67)),
       drawer: buildDrawer(), // Add the drawer
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -61,13 +62,55 @@ class _DashboardPageState extends State<DashboardPage> {
             Container(
               height: 200.0,
               child: newsAndNotifications.isEmpty
-                  ? Center(child: Text('No news available.'))
+                  ? Center(child: CircularProgressIndicator())
                   : Swiper(
                       itemBuilder: (BuildContext context, int index) {
                         return Card(
-                          // Display fetched news or notification data
-                          child:
-                              Center(child: Text(newsAndNotifications[index])),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: <Widget>[
+                              Image.network(
+                                newsAndNotifications[index].imageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.green[900]!
+                                    ],
+                                    stops: [0.5, 1.0],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  newsAndNotifications[index].headline,
+                                  style: TextStyle(
+                                    fontSize: 24.0,
+                                    color: Colors.white,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.bold,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: Offset(1.0, 1.0),
+                                        blurRadius: 3.0,
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.green, width: 3.0),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
                         );
                       },
                       itemCount: newsAndNotifications.length,
@@ -81,11 +124,30 @@ class _DashboardPageState extends State<DashboardPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: WeatherCard()),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [Colors.green[200]!, Colors.green[700]!],
+                        ),
+                      ),
+                      child: Card(
+                        child: Center(
+                          child: Image.asset(
+                              'assets/icons/weather_icon.png'), // your weather icon asset
+                        ),
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.green, width: 3.0),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(width: 16.0),
                   Expanded(
-                      child:
-                          PlantDiseaseDetectionPage()), // Use PlantDiseaseDetectionCard here
+                      child: PlantDiseaseDetectionCard()), // Corrected here
                 ],
               ),
             ),
@@ -114,12 +176,14 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: const Color.fromARGB(255, 62, 147, 67), // Color of the app
             ),
             child: Text(
               'Menu',
               style: TextStyle(fontSize: 24, color: Colors.white),
             ),
+            margin: EdgeInsets.zero, // Remove bottom margin
+            padding: EdgeInsets.all(16.0), // Add some padding
           ),
           ListTile(
             leading: Icon(Icons.settings),

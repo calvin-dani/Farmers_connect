@@ -59,25 +59,33 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
                 child: Icon(Icons.camera_alt, size: 100.0),
               ),
             SizedBox(height: 20.0),
-            if (_imageFile != null)
-              Flexible(
-                child: Image.file(_imageFile!),
-              )
-            else
-              Flexible(
-                child: Icon(Icons.camera_alt, size: 100.0),
-              ),
-            SizedBox(height: 20.0),
             if (_diseaseName != null)
               Text('Detected Disease: $_diseaseName',
                   style: TextStyle(fontSize: 18.0)),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _detectDisease,
-        tooltip: 'Detect Disease',
-        child: Icon(Icons.check),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Positioned(
+            bottom: 10.0,
+            right: 10.0,
+            child: FloatingActionButton(
+              onPressed: () => _pickImage(ImageSource.gallery),
+              tooltip: 'Pick Image from gallery',
+              child: Icon(Icons.photo_library),
+            ),
+          ),
+          Positioned(
+            bottom: 70.0,
+            right: 10.0,
+            child: FloatingActionButton(
+              onPressed: () => _pickImage(ImageSource.camera),
+              tooltip: 'Take a Photo',
+              child: Icon(Icons.camera_alt),
+            ),
+          ),
+        ],
       ),
     );
   }
