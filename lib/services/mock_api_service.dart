@@ -28,16 +28,16 @@ class MockApiService {
     String newsJson = '''
       [
         {
-          "headline": "Breaking News: Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-          "imageUrl": "https://example.com/image1.jpg"
+          "headline": "Breaking News: Rain Mayhem: IMD puts central Maharashtra on red alert; crop damage expected",
+          "imageUrl": "/assets/images/rain.jpeg"
         },
         {
-          "headline": "Sports News: Nulla quis interdum quam. Duis dapibus purus vitae neque posuere, eu consectetur nunc posuere.",
-          "imageUrl": "https://example.com/image2.jpg"
+          "headline": "Maharashtra Agriculture Day 2023: Date, History And Significance Of Maharashtra Krishi Din",
+          "imageUrl": "/assets/images/agri.jpeg"
         },
         {
-          "headline": "Entertainment News: In vel nisi eu risus semper venenatis. Integer eget dolor nec orci finibus congue vel ac purus.",
-          "imageUrl": "https://example.com/image3.jpg"
+          "headline": "Maharashtra: Marathwada agri university makes over 1,000 acres of unused land cultivable",
+          "imageUrl": "/assets/images/maha.jpeg"
         }
       ]
     ''';
