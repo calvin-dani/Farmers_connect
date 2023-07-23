@@ -174,27 +174,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [Colors.green[200]!, Colors.green[700]!],
-                        ),
-                      ),
-                      child: Card(
-                        child: Center(
-                          child: Image.asset(
-                              'assets/icons/weather_icon.png'), // your weather icon asset
-                        ),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.green, width: 3.0),
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                    ),
-                  ),
+                  Expanded(child: WeatherCard()),
                   SizedBox(width: 16.0),
                   Expanded(
                       child: PlantDiseaseDetectionCard()), // Corrected here
