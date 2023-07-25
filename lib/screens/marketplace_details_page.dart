@@ -1,7 +1,27 @@
 // marketplace_details_page.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../interface/product.dart';
+import 'marketplace_create_product.dart';
+
 class MarketplaceDetailsPage extends StatelessWidget {
+
+  Widget buildProducts(Product product) => ListTile(
+    title: Text(product.name)
+  );
+
+  Stream<List<Product>> readProduct() {
+    return FirebaseFirestore.instance.collection('marketplace').snapshots().map(
+        (snapshot) =>
+            snapshot.docs.map((doc) {
+              print(doc.data());
+              print("HERE");
+              return Product.fromJson(doc.data());
+            }
+             ).toList());
+  }
+
   final List<Map<String, dynamic>> items = [
     {
       'image': '/assets/images/carrots.jpeg',
@@ -33,47 +53,99 @@ class MarketplaceDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Marketplace'),
       ),
-      body: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return Card(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.green, width: 2.0),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Image.network(
-                    item['image'],
-                    fit: BoxFit.cover,
-                  ),
+      body: Column(children: [
+        Text('Welcome back, CalShek!', style: TextStyle(fontSize: 24.0)),
+        Expanded(
+          child: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return Card(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.green, width: 2.0),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item['name'],
-                          style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text('Price: \$${item['price']}'),
-                        Text('Quantity: ${item['quantity']}'),
-                        Text('Posted Date: ${item['date']}'),
-                      ],
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Image.network(
+                        item['image'],
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item['name'],
+                              style: TextStyle(
+                                  fontSize: 18.0, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 4.0),
+                            Text('Price: \$${item['price']}'),
+                            Text('Quantity: ${item['quantity']}'),
+                            Text('Posted Date: ${item['date']}'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        ),
+        Expanded(child: StreamBuilder<List<Product>>(
+          stream: readProduct(),
+          builder: (context, snapshot) {
+            if(snapshot.hasError){
+              print(snapshot.error);
+              return Text("Unable to Load");
+            }
+            else if (snapshot.hasData){
+              final products = snapshot.data!;
+              return ListView(
+                children: products.map(buildProducts).toList()
+              );
+            }
+            else{
+              return Text("LOADING");
+            }
+          } ,
+        )),
+        Container(
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MarketplaceProductCreate()),
+                        );
+                      },
+                      icon: Icon(Icons.add))),
+              SizedBox(width: 16.0),
+              Expanded(
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MarketplaceProductCreate()),
+                        );
+                      },
+                      icon: Icon(Icons.add))), // Corrected here
+            ],
+          ),
+        ),
+      ]),
     );
   }
 }
