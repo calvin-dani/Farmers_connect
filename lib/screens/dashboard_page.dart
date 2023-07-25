@@ -57,19 +57,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return true;
   }
 
-//  Future<void> _getLocation() async {
-//     try {
-//       await Geolocator.getCurrentPosition(
-//               desiredAccuracy: LocationAccuracy.high)
-//           .then((Position position) {
-//         setState(() => _currentPosition = position);
-//       }).catchError((e) {
-//         debugPrint(e);
-//       });
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
+
 
   void fetchNews() async {
     try {

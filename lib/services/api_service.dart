@@ -55,7 +55,7 @@ class ApiService {
           double lon = _currentPosition?.longitude ?? 0;
         print("$lat $lon");
       String weatherApiUrl =
-          'https://api.openweathermap.org/data/2.5/weather?lat=33.44&lon=-94.04&appid=42902981ecee4487be71ac3395731ce4';
+          'https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=42902981ecee4487be71ac3395731ce4';
       final response = await http.get(Uri.parse(weatherApiUrl));
       if (response.statusCode == 200) {
         final dynamic data = json.decode(response.body);
