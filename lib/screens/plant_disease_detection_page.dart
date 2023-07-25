@@ -1,12 +1,13 @@
 import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:tflite/tflite.dart';
 import 'package:image/image.dart' as img;
-import 'dart:typed_data';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:html' as html;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:tflite/tflite.dart';
 
 class PlantDiseaseDetectionPage extends StatefulWidget {
   @override
@@ -17,8 +18,6 @@ class PlantDiseaseDetectionPage extends StatefulWidget {
 class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
   File? _imageFile;
   String? _diseaseName;
-
-  String? _imageFileUrl;
 
   @override
   void initState() {
@@ -42,18 +41,22 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
       final pickedFile = await ImagePicker().pickImage(source: source);
       if (pickedFile != null) {
         if (kIsWeb) {
-          final data = await pickedFile.readAsBytes();
-          final blob = html.Blob([data]);
-          final url = html.Url.createObjectUrlFromBlob(blob);
+          // For web platform, the pickedFile contains a data URL
           setState(() {
-            _imageFileUrl = url;
+            _imageFile = File(pickedFile.path);
             _diseaseName =
                 null; // Reset the disease name when a new image is picked
           });
-          _detectDisease(data.buffer.asUint8List());
+          _detectDisease(_imageFile!.readAsBytesSync());
         } else {
+          // For non-web platforms, create a local file URL
+          final appDir = await getApplicationDocumentsDirectory();
+          final localFile = await File(
+                  '${appDir.path}/${DateTime.now().toIso8601String()}.png')
+              .create();
+          await localFile.writeAsBytes(await pickedFile.readAsBytes());
           setState(() {
-            _imageFile = File(pickedFile.path);
+            _imageFile = localFile;
             _diseaseName =
                 null; // Reset the disease name when a new image is picked
           });
