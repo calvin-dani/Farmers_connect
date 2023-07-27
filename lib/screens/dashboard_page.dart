@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../auth.dart';
 import '/services/api_service.dart';
 import 'weather_page.dart';
@@ -72,6 +73,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> signOut() async {
+    await GoogleSignIn().signOut();
     await Auth().signOut();
   }
 

@@ -4,10 +4,10 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:tflite/tflite.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:tflite/tflite.dart';
+// import 'dart:html' as html;
 
 class PlantDiseaseDetectionPage extends StatefulWidget {
   @override
@@ -22,15 +22,15 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
   @override
   void initState() {
     super.initState();
-    loadModel();
+    // loadModel();
   }
 
   Future loadModel() async {
     try {
-      await Tflite.loadModel(
-        model: "assets/model.tflite",
-        labels: "assets/labels.txt", // Assuming you have a labels.txt file
-      );
+      // await Tflite.loadModel(
+      //   model: "assets/model.tflite",
+      //   labels: "assets/labels.txt", // Assuming you have a labels.txt file
+      // );
     } catch (e) {
       print('Failed to load model: $e');
     }
@@ -41,25 +41,27 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
       final pickedFile = await ImagePicker().pickImage(source: source);
       if (pickedFile != null) {
         if (kIsWeb) {
-          // For web platform, the pickedFile contains a data URL
+          // final data = await pickedFile.readAsBytes();
+          // final blob = html.Blob([data]);
+          // final url = html.Url.createObjectUrlFromBlob(blob);
           setState(() {
-            _imageFile = File(pickedFile.path);
-            _diseaseName =
-                null; // Reset the disease name when a new image is picked
+            // _imageFileUrl = url;
+            // _diseaseName =
+            null; // Reset the disease name when a new image is picked
           });
-          _detectDisease(_imageFile!.readAsBytesSync());
+          // _detectDisease(data.buffer.asUint8List());
         } else {
           // For non-web platforms, create a local file URL
-          final appDir = await getApplicationDocumentsDirectory();
-          final localFile = await File(
-                  '${appDir.path}/${DateTime.now().toIso8601String()}.png')
-              .create();
-          await localFile.writeAsBytes(await pickedFile.readAsBytes());
-          setState(() {
-            _imageFile = localFile;
-            _diseaseName =
-                null; // Reset the disease name when a new image is picked
-          });
+          //final appDir = await getApplicationDocumentsDirectory();
+          // final localFile = await File(
+          //         '${appDir.path}/${DateTime.now().toIso8601String()}.png')
+          //     .create();
+          // await localFile.writeAsBytes(await pickedFile.readAsBytes());
+          // setState(() {
+          //   _imageFile = localFile;
+          //   _diseaseName =
+          //       null; // Reset the disease name when a new image is picked
+          // });
           var image = img.decodeImage(_imageFile!.readAsBytesSync());
           var resizedImg = img.copyResizeCropSquare(
               image!, 224); // Assuming the model takes 224x224 sized images
@@ -74,20 +76,20 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
   }
 
   Future _detectDisease(Uint8List imgBytes) async {
-    var recognitions = await Tflite.runModelOnBinary(
-      binary: imgBytes,
-      numResults: 2,
-      threshold: 0.2,
-      asynch: true,
-    );
+    // var recognitions = await Tflite.runModelOnBinary(
+    //   binary: imgBytes,
+    //   numResults: 2,
+    //   threshold: 0.2,
+    //   asynch: true,
+    // );
 
-    setState(() {
-      if (recognitions != null && recognitions.isNotEmpty) {
-        _diseaseName = recognitions[0]["label"];
-      } else {
-        _diseaseName = "Unknown";
-      }
-    });
+    // setState(() {
+    //   if (recognitions != null && recognitions.isNotEmpty) {
+    //     _diseaseName = recognitions[0]["label"];
+    //   } else {
+    //     _diseaseName = "Unknown";
+    //   }
+    // });
   }
 
   Uint8List imageToByteListFloat32(

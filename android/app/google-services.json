@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "431421130883-4kbhfjvsgd3dnb9j1il10sst9mt8khf0.apps.googleusercontent.com",
+          "client_id": "431421130883-gh58ik7048190ukd7vkbhgfslnegkbgu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.farmersConnect",
+            "certificate_hash": "6e5613f5caabc6c52642c2bad94ad66212cd8752"
+          }
+        },
+        {
+          "client_id": "431421130883-j7c0dl942b1b6c4d02utfjpr0om0363e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,6 +37,49 @@
             {
               "client_id": "431421130883-4kbhfjvsgd3dnb9j1il10sst9mt8khf0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "431421130883-6gt6i2bh5hrm3ojd9rej1hm2ffllqa8t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.farmersConnect.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431421130883:android:c7f23fefc1630384c1b3b6",
+        "android_client_info": {
+          "package_name": "com.example.farmers_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431421130883-j7c0dl942b1b6c4d02utfjpr0om0363e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8AusuvxY4rL61kAyjmIqbWLDpKu7l1Pg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431421130883-4kbhfjvsgd3dnb9j1il10sst9mt8khf0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "431421130883-6gt6i2bh5hrm3ojd9rej1hm2ffllqa8t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.farmersConnect.RunnerTests"
+              }
             }
           ]
         }
