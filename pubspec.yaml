@@ -25,6 +25,8 @@ dependencies:
   cloud_firestore: "4.8.4"
   firebase_storage: "11.2.5"
   uuid: ^3.0.4
+  tflite_flutter: ^0.10.1
+  camera: ^0.10.5+2
   
 
 dev_dependencies:
@@ -38,3 +40,4 @@ flutter:
     - assets/images/
     - assets/icons/weather_icon.png
     - assets/images/placeholder_image.png 
+    - assets/models/

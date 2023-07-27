@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 // ignore: unused_import
-import 'package:image_picker_for_web/image_picker_for_web.dart';
+// import 'package:image_picker_for_web/image_picker_for_web.dart';
 import 'package:logintunisia/interface/product.dart';
 import 'package:uuid/uuid.dart';
 
