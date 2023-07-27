@@ -91,7 +91,7 @@ class _SearchScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print("I ove tunisia");
+                      print("I ");
                     }
                     //Get.to(ChoiceScreen());
                   },

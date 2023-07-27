@@ -20,6 +20,7 @@ class _WidgetTreeState extends State<WidgetTree>{
   Widget build(BuildContext context){
     return StreamBuilder(stream: Auth().authStateChanges,
     builder: (context,snapshot){
+      // print(snapshot);
       if(snapshot.hasData){
         return DashboardPage();
       }
