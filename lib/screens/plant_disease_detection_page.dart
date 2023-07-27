@@ -63,11 +63,11 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
           //       null; // Reset the disease name when a new image is picked
           // });
           var image = img.decodeImage(_imageFile!.readAsBytesSync());
-          var resizedImg = img.copyResizeCropSquare(
-              image!, 224); // Assuming the model takes 224x224 sized images
-          var imgBytes = imageToByteListFloat32(resizedImg, 224, 127.5,
-              127.5); // Adjust the parameters according to your model's requirements
-          _detectDisease(imgBytes.buffer.asUint8List());
+          // var resizedImg = img.copyResizeCropSquare(image!,
+          //     size: 224); // Assuming the model takes 224x224 sized images
+          // var imgBytes = imageToByteListFloat32(resizedImg, 224, 127.5,
+          //     127.5); // Adjust the parameters according to your model's requirements
+          // _detectDisease(imgBytes.buffer.asUint8List());
         }
       }
     } catch (e) {
@@ -99,12 +99,17 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
     int pixelIndex = 0;
     for (var i = 0; i < inputSize; ++i) {
       for (var j = 0; j < inputSize; ++j) {
-        var pixel = image.getPixel(j, i);
-        buffer[pixelIndex++] = (img.getRed(pixel) - mean) / std;
-        buffer[pixelIndex++] = (img.getGreen(pixel) - mean) / std;
-        buffer[pixelIndex++] = (img.getBlue(pixel) - mean) / std;
+        var pixel = image.getPixelSafe(j, i);
+        // var red = pixel.r;
+        // var green = pixel.g;
+        // var blue = pixel.b;
+
+        // buffer[pixelIndex++] = (red - mean) / std;
+        // buffer[pixelIndex++] = (green - mean) / std;
+        // buffer[pixelIndex++] = (blue - mean) / std;
       }
     }
+
     return convertedBytes.buffer.asUint8List();
   }
 

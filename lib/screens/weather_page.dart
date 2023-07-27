@@ -1,7 +1,8 @@
 // weather_page.dart
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
 import 'package:geolocator/geolocator.dart';
+
+import '../services/api_service.dart';
 
 class WeatherCard extends StatefulWidget {
   @override
@@ -141,21 +142,21 @@ class WeatherPage extends StatelessWidget {
           )),
           (ListTile(
             title: Text(OptionsAPI[1]),
-            subtitle: Text(weatherData['main']["temp"].toString()),
+            subtitle: Text((weatherData['main']["temp"] as num).toString()),
             onTap: () {
               // Add your action when tapping the card here
             },
           )),
           (ListTile(
             title: Text(OptionsAPI[2]),
-            subtitle: Text(weatherData['wind']["speed"].toString()),
+            subtitle: Text((weatherData['wind']["speed"] as num).toString()),
             onTap: () {
               // Add your action when tapping the card here
             },
           )),
           (ListTile(
             title: Text(OptionsAPI[4]),
-            subtitle: Text(weatherData['clouds']["all"].toString()),
+            subtitle: Text((weatherData['clouds']["all"] as num).toString()),
             onTap: () {
               // Add your action when tapping the card here
             },

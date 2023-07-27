@@ -1,36 +1,37 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Product{
+class Product {
   String name;
   String add;
   double price;
   GeoPoint loc;
   String id;
-  
-  Product({
-    this.id ='',
-    required this.name,
-    required this.add,
-    required this.price,
-    required this.loc
-  });
+  String imageUrl; // add this
 
-  Map<String,dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'add' : add,
-    'price' : price,
-    'loc' : loc,
-  };
+  Product(
+      {this.id = '',
+      required this.name,
+      required this.add,
+      required this.price,
+      required this.loc,
+      required this.imageUrl // add this
+      });
 
-  static Product fromJson(Map<String,dynamic> json) => Product(
-    id: json['id'],
-    name: json['name'],
-    add: json['add'],
-    price: json['price'],
-    loc: json['loc'],
-  );
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'add': add,
+        'price': price,
+        'loc': loc,
+        'imageUrl': imageUrl, // add this
+      };
 
+  static Product fromJson(Map<String, dynamic> json) => Product(
+        id: json['id'] ?? '',
+        name: json['name'] ?? '',
+        add: json['add'] ?? '',
+        price: json['price'] ?? 0.0,
+        loc: json['loc'] ?? GeoPoint(0, 0),
+        imageUrl: json['imageUrl'] ?? '', // add this
+      );
 }
