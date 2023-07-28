@@ -43,8 +43,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 20),
-              _entryField("Email", _controllerEmail),
-              _entryField("Password", _controllerPassword),
+              _entryField("Email", _controllerEmail,false),
+              _entryField("Password", _controllerPassword,true),
               _errorMessage(),
               _submitButton(),
               _loginOrRegisterButton(),
@@ -55,8 +55,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _entryField(String title, TextEditingController controller) {
+  Widget _entryField(String title, TextEditingController controller, bool obscureField) {
     return TextField(
+      obscureText: obscureField,
       controller: controller,
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
