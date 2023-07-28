@@ -30,8 +30,8 @@ class Product {
         id: json['id'] ?? '',
         name: json['name'] ?? '',
         add: json['add'] ?? '',
-        price: json['price'] ?? 0.0,
+        price: (json['price'] ?? 0).toDouble(), // Convert to double
         loc: json['loc'] ?? GeoPoint(0, 0),
-        imageUrl: json['imageUrl'] ?? '', // add this
+        imageUrl: json['imageUrl'] ?? '',
       );
 }

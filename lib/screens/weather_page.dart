@@ -1,4 +1,3 @@
-// weather_page.dart
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -100,16 +99,28 @@ class _WeatherCardState extends State<WeatherCard> {
         );
       },
       child: Card(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.wb_sunny,
-                size: 80), // Default weather related icon from Flutter
-            SizedBox(height: 8.0),
-            Text('Weather', style: TextStyle(fontSize: 18.0)),
-            SizedBox(height: 8.0),
-            // Text(weatherData),
-          ],
+        color: Colors.green, // Change the background color of the card to green
+        child: Padding(
+          padding: EdgeInsets.all(16.0), // Add padding to the Card
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.wb_sunny,
+                  size: 80,
+                  color: Colors.white), // Change the color of the icon to white
+              SizedBox(height: 8.0),
+              Text(
+                'Weather',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.white, // Change the color of the text to white
+                  fontWeight: FontWeight.bold, // Make the font bold
+                ),
+              ),
+              SizedBox(height: 8.0),
+              // Text(weatherData),
+            ],
+          ),
         ),
       ),
     );
@@ -118,49 +129,103 @@ class _WeatherCardState extends State<WeatherCard> {
 
 class WeatherPage extends StatelessWidget {
   dynamic weatherData = {'id': 0, 'main': '', 'description': '', 'icon': ''};
-  List<String> OptionsAPI = [
-    'Weather',
-    'Temperature',
-    'Wind',
-    'Rain',
-    'Clouds'
-  ];
   WeatherPage(this.weatherData);
 
   @override
   Widget build(BuildContext context) {
     print(weatherData);
+    double tempCelsius = weatherData['main']["temp"];
+    double tempFahrenheit = tempCelsius / 10 * 9 / 5 + 32;
+    double windSpeedKmph = weatherData['wind']["speed"];
+    double windSpeedMph = windSpeedKmph * 0.621371;
     return Scaffold(
-        appBar: AppBar(title: Text('Weather')),
-        body: ListView(children: [
-          (ListTile(
-            title: Text(OptionsAPI[0]),
-            subtitle: Text(weatherData['weather'][0]["description"] ?? ""),
-            onTap: () {
-              // Add your action when tapping the card here
-            },
-          )),
-          (ListTile(
-            title: Text(OptionsAPI[1]),
-            subtitle: Text((weatherData['main']["temp"] as num).toString()),
-            onTap: () {
-              // Add your action when tapping the card here
-            },
-          )),
-          (ListTile(
-            title: Text(OptionsAPI[2]),
-            subtitle: Text((weatherData['wind']["speed"] as num).toString()),
-            onTap: () {
-              // Add your action when tapping the card here
-            },
-          )),
-          (ListTile(
-            title: Text(OptionsAPI[4]),
-            subtitle: Text((weatherData['clouds']["all"] as num).toString()),
-            onTap: () {
-              // Add your action when tapping the card here
-            },
-          ))
-        ]));
+      appBar: AppBar(
+        title: Text('Weather'),
+        centerTitle: true,
+      ),
+      body: Container(
+        color: Colors.green[50],
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 32.0),
+                child: Text(
+                  '${weatherData['name']}', // Location name here
+                  style: TextStyle(
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[800],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  'Weather Description: ${weatherData['weather'][0]["description"]}',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[800],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  'Temperature: ${tempFahrenheit.toStringAsFixed(2)}°F',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[800],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  'Wind Speed: ${windSpeedMph.toStringAsFixed(2)} mph',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[800],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  'Humidity: ${weatherData['main']["humidity"].toString()}%',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[800],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  'Clouds: ${weatherData['clouds']["all"].toString()}%',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[800],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -28,6 +28,10 @@ dependencies:
   tflite_flutter: ^0.10.1
   camera: ^0.10.5+2
   
+  #theme stuff
+  flutter_svg: "2.0.7"
+  google_fonts: "5.1.0"
+
 
 dev_dependencies:
   flutter_test:
@@ -38,6 +42,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/
     - assets/icons/weather_icon.png
     - assets/images/placeholder_image.png 
     - assets/models/
+    - assets/images/maha.jpeg
+    - assets/images/rain.jpeg
+    - assets/images/agri.jpeg
+    - assets/icons/farmersConnect_icon.png

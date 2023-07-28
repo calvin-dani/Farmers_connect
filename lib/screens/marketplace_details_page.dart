@@ -54,7 +54,8 @@ class MarketplaceDetailsPage extends StatelessWidget {
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         )),
-                    Text('Price: \$${product.price.toStringAsFixed(2)}'),
+                    Text(
+                        'Price: \$${product.price.toDouble().toStringAsFixed(2)}'),
                     Text('Address: ${product.add}'),
                   ],
                 ),

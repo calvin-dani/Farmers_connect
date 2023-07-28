@@ -1,18 +1,13 @@
-// dashboard_page.dart
-// ignore_for_file: prefer_const_constructors
-
-import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../auth.dart';
+
 import '/services/api_service.dart';
-import 'weather_page.dart';
-import 'news_bulletin_page.dart';
-import 'plant_disease_detection_page.dart';
+import '../auth.dart';
 import 'marketplace_page.dart';
-import 'miscellaneous_page.dart';
 import 'plant_disease_detection_card.dart';
+import 'weather_page.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -58,8 +53,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return true;
   }
 
-
-
   void fetchNews() async {
     try {
       final List<NewsItem> news = await ApiService.fetchNews();
@@ -81,22 +74,24 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            'Farmers Connect',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Roboto',
-            ),
+        title: Text(
+          'FarmersConnect',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Montserrat',
           ),
-          backgroundColor: const Color.fromARGB(255, 62, 147, 67)),
+        ),
+        backgroundColor: const Color.fromARGB(255, 62, 147, 67),
+      ),
       drawer: buildDrawer(), // Add the drawer
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            Text('Welcome back, CalShek!', style: TextStyle(fontSize: 24.0)),
+            Text('Welcome Back!',
+                style: TextStyle(fontSize: 38.0, fontWeight: FontWeight.bold)),
             SizedBox(height: 16.0),
             // Set a specific height for the News Bulletin swiper
             Container(
@@ -109,8 +104,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: Stack(
                             fit: StackFit.expand,
                             children: <Widget>[
-                              Image.network(
-                                newsAndNotifications[index].imageUrl,
+                              Image.asset(
+                                'assets${newsAndNotifications[index].imageUrl}',
                                 fit: BoxFit.cover,
                               ),
                               Container(
@@ -149,7 +144,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.green, width: 3.0),
-                            borderRadius: BorderRadius.circular(15.0),
                           ),
                         );
                       },
@@ -159,30 +153,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
             ),
             SizedBox(height: 16.0),
-            Container(
-              height: 200,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(child: WeatherCard()),
-                  SizedBox(width: 16.0),
-                  Expanded(
-                      child: PlantDiseaseDetectionCard()), // Corrected here
-                ],
-              ),
-            ),
+            WeatherCard(),
             SizedBox(height: 16.0),
-            Container(
-              height: 200,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(child: MarketplaceCard()),
-                  SizedBox(width: 16.0),
-                  Expanded(child: MiscellaneousCard()),
-                ],
-              ),
-            ),
+            PlantDiseaseDetectionCard(),
+            SizedBox(height: 16.0),
+            MarketplaceCard(),
           ],
         ),
       ),

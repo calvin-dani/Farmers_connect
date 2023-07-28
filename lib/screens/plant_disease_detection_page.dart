@@ -1,18 +1,14 @@
 import 'dart:io';
-import 'dart:io' as io;
 import 'dart:isolate';
-import 'dart:typed_data';
-import 'package:image/image.dart' as image_lib;
+
 import 'package:camera/camera.dart';
-// import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:tflite/tflite.dart';
+import 'package:image/image.dart' as image_lib;
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
-// import 'dart:html' as html;
 
 class PlantDiseaseDetectionPage extends StatefulWidget {
   @override
@@ -35,18 +31,6 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
     imageClassificationHelper = ImageClassificationHelper();
     imageClassificationHelper!.initHelper();
     super.initState();
-    // loadModel();
-  }
-
-  Future loadModel() async {
-    try {
-      // await Tflite.loadModel(
-      //   model: "assets/model.tflite",
-      //   labels: "assets/labels.txt", // Assuming you have a labels.txt file
-      // );
-    } catch (e) {
-      print('Failed to load model: $e');
-    }
   }
 
   Future<void> _pickImageGallery(ImageSource source) async {
@@ -56,7 +40,6 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
     );
 
     imagePath = result?.path;
-    // setState(() {});
     processImage();
   }
 
@@ -71,47 +54,8 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
     processImage();
   }
 
-  Future _detectDisease(Uint8List imgBytes) async {
-    // var recognitions = await Tflite.runModelOnBinary(
-    //   binary: imgBytes,
-    //   numResults: 2,
-    //   threshold: 0.2,
-    //   asynch: true,
-    // );
-
-    // setState(() {
-    //   if (recognitions != null && recognitions.isNotEmpty) {
-    //     _diseaseName = recognitions[0]["label"];
-    //   } else {
-    //     _diseaseName = "Unknown";
-    //   }
-    // });
-  }
-
-  Uint8List imageToByteListFloat32(
-      img.Image image, int inputSize, double mean, double std) {
-    var convertedBytes = Float32List(1 * inputSize * inputSize * 3);
-    var buffer = Float32List.view(convertedBytes.buffer);
-    int pixelIndex = 0;
-    for (var i = 0; i < inputSize; ++i) {
-      for (var j = 0; j < inputSize; ++j) {
-        var pixel = image.getPixelSafe(j, i);
-        // var red = pixel.r;
-        // var green = pixel.g;
-        // var blue = pixel.b;
-
-        // buffer[pixelIndex++] = (red - mean) / std;
-        // buffer[pixelIndex++] = (green - mean) / std;
-        // buffer[pixelIndex++] = (blue - mean) / std;
-      }
-    }
-
-    return convertedBytes.buffer.asUint8List();
-  }
-
   void cleanResult() {
     imagePath = null;
-    // image = ;
     classification = null;
     setState(() {});
   }
@@ -122,82 +66,94 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
       // Read image bytes from file
       final imageData = File(imagePath!).readAsBytesSync();
 
-      // Decode image using package:image/image.dart (https://pub.dev/image)
-       
       img.Image? res = img.decodeImage(imageData);
       image = res!;
       setState(() {});
-      classification =
-          await imageClassificationHelper?.inferenceImage(image);
-          print(classification);
+      classification = await imageClassificationHelper?.inferenceImage(image);
+      print(classification);
       setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    String highestProbDisease = '';
+    double highestProb = 0.0;
+    if (classification != null) {
+      classification!.forEach((key, value) {
+        if (value > highestProb) {
+          highestProb = value;
+          highestProbDisease = key;
+        }
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Plant Disease Detection'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Column(
         children: <Widget>[
-          // This Expanded widget makes the image take up 3/5th of the screen
           Expanded(
-            flex: 3,
-            child: Center(
-              child: _imageFile != null
-                  ? Image.file(_imageFile!)
-                  : Icon(Icons.camera_alt, size: 100.0),
+            flex: 6,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              margin: EdgeInsets.all(8.0),
+              width: double.infinity,
+              child: imagePath != null
+                  ? Image.file(File(imagePath!), fit: BoxFit.cover)
+                  : Icon(Icons.image, size: 100.0, color: Colors.grey),
             ),
           ),
-          // This Expanded widget makes the details card take up 2/5th of the screen
           Expanded(
-            flex: 2,
-            child: _diseaseName != null
-                ? Card(
-                    color:
-                        Colors.lightGreen[100], // Choose a color that you like
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Detected Disease: $classification[0]',
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-                          ),
-                          // TODO: Add code to calculate and display the confidence percentage
-                          // Text('Confidence: ${confidencePercentage}%'),
-                          // TODO: Add code to display the methods to cure the disease
-                          // Text('Cure: ${cureMethods}'),
-                        ],
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.all(8.0),
+              alignment: Alignment.center,
+              child: classification != null
+                  ? SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Text(
+                        'Disease Detected: $highestProbDisease \nConfidence: ${(highestProb * 100).toStringAsFixed(2)}%',
+                        style: TextStyle(fontSize: 24.0),
+                        textAlign: TextAlign.center,
                       ),
+                    )
+                  : Text(
+                      'No Disease Detected',
+                      style: TextStyle(fontSize: 24.0),
+                      textAlign: TextAlign.center,
                     ),
-                  )
-                : Container(),
-          ),
-        ],
-      ),
-      floatingActionButton: Stack(
-        children: <Widget>[
-          Positioned(
-            bottom: 10.0,
-            right: 10.0,
-            child: FloatingActionButton(
-              onPressed: () => _pickImageGallery(ImageSource.gallery),
-              tooltip: 'Pick Image from gallery',
-              child: Icon(Icons.photo_library),
             ),
           ),
-          Positioned(
-            bottom: 70.0,
-            right: 10.0,
-            child: FloatingActionButton(
-              onPressed: () => _pickImageCam(ImageSource.camera),
-              tooltip: 'Take a Photo',
-              child: Icon(Icons.camera_alt),
+          Expanded(
+            flex: 1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                FloatingActionButton(
+                  heroTag: "fab1",
+                  onPressed: () => _pickImageGallery(ImageSource.gallery),
+                  tooltip: 'Pick Image from gallery',
+                  child: Icon(Icons.photo_library),
+                ),
+                FloatingActionButton(
+                  heroTag: "fab2",
+                  onPressed: () => _pickImageCam(ImageSource.camera),
+                  tooltip: 'Take a Photo',
+                  child: Icon(Icons.camera_alt),
+                ),
+              ],
             ),
           ),
         ],
@@ -207,8 +163,6 @@ class _PlantDiseaseDetectionPageState extends State<PlantDiseaseDetectionPage> {
 }
 
 class ImageClassificationHelper {
-
-
   static const modelPath = './assets/models/model.tflite';
   static const labelsPath = './assets/models/label.txt';
 
@@ -220,7 +174,6 @@ class ImageClassificationHelper {
 
   // Load model
   Future<void> _loadModel() async {
-    
     final directory = await getApplicationDocumentsDirectory();
 
 // final dir = directory.path;
@@ -288,8 +241,8 @@ class ImageClassificationHelper {
 
   // inference still image
   Future<Map<String, double>> inferenceImage(img.Image image) async {
-    var isolateModel = InferenceModel(null, image,
-        interpreter.address, labels, inputTensor.shape, outputTensor.shape);
+    var isolateModel = InferenceModel(null, image, interpreter.address, labels,
+        inputTensor.shape, outputTensor.shape);
     return _inference(isolateModel);
   }
 

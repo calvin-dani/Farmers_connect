@@ -39,14 +39,15 @@ class _MarketplaceProductCreateState extends State<MarketplaceProductCreate> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        uploadFileToFirebase(pickedFile as PickedFile);
+        uploadFileToFirebase(pickedFile); // Remove the typecast
       } else {
         print('No image selected.');
       }
     });
   }
 
-  Future<String> uploadFileToFirebase(PickedFile file) async {
+  Future<String> uploadFileToFirebase(XFile file) async {
+    // Change PickedFile to XFile
     String fileName = file.path.split('/').last;
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
@@ -122,39 +123,43 @@ class _MarketplaceProductCreateState extends State<MarketplaceProductCreate> {
       appBar: AppBar(
         title: Text('Enter Details'),
       ),
-      body: Column(
-        children: [
-          _buildTextField("Product Name", _nameController, "TEXT_INPUT"),
-          _buildTextField("Address", _addController, "TEXT_INPUT"),
-          _buildNumberField("Price", _priceController),
-          _imageUrl == null
-              ? Text('No image selected.')
-              : Image.network(_imageUrl!),
-          FloatingActionButton(
-            onPressed: getImage,
-            tooltip: 'Pick Image',
-            child: Icon(Icons.add_a_photo),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              String imageUrl = _imageUrl ??
-                  'https://firebasestorage.googleapis.com/v0/b/farmersconnect-21f53.appspot.com/o/placeholder_image.png?alt=media&token=b13cca4d-26d2-452d-8d74-29e160114424';
-              // Do something with the form fields' values here
-              createProduct(
-                  _nameController.text,
-                  _addController.text,
-                  double.parse(_priceController.text),
-                  _currentPosition?.latitude ?? 0,
-                  _currentPosition?.longitude ?? 0,
-                  imageUrl);
-              // For example, print them to the console:
-              print("Field 1: ${_addController.text}");
-              print("Field 3: ${_priceController.text}");
-              Navigator.pop(context); // Go back to the previous screen
-            },
-            child: Text('Submit'),
-          ),
-        ],
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildTextField("Product Name", _nameController, "TEXT_INPUT"),
+            SizedBox(height: 16.0), // Add space
+            _buildTextField("Address", _addController, "TEXT_INPUT"),
+            SizedBox(height: 16.0), // Add space
+            _buildNumberField("Price", _priceController),
+            SizedBox(height: 16.0), // Add space
+            _imageUrl == null
+                ? Text('No image selected.')
+                : Image.network(_imageUrl!),
+            SizedBox(height: 16.0), // Add space
+            FloatingActionButton(
+              onPressed: getImage,
+              tooltip: 'Pick Image',
+              child: Icon(Icons.add_a_photo),
+            ),
+            SizedBox(height: 16.0), // Add space
+            ElevatedButton(
+              onPressed: () async {
+                String imageUrl = _imageUrl ??
+                    'https://firebasestorage.googleapis.com/v0/b/farmersconnect-21f53.appspot.com/o/placeholder_image.png?alt=media&token=b13cca4d-26d2-452d-8d74-29e160114424';
+                createProduct(
+                    _nameController.text,
+                    _addController.text,
+                    double.parse(_priceController.text),
+                    _currentPosition?.latitude ?? 0,
+                    _currentPosition?.longitude ?? 0,
+                    imageUrl);
+                Navigator.pop(context); // Go back to the previous screen
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        ),
       ),
     );
   }
